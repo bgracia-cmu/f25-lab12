@@ -1,30 +1,31 @@
 package edu.cmu.Weather;
 
+// BG: 1. Violates Usability API design principle (U2, U7)
+// BG: since it uses a boolean flag to indicate unit preference instead of a more explicit approach
+// BG: as well as mixing unit conversion logic within the getter method.
+// BG: 2. The getter was wrong since it converted to mm when the flag indicated inches.
+
 public class Weather {
     private WeatherService weatherService;
-    private boolean inches;
 
     /**
-     * Sets the length scale for rainfall.
-     *
-     * @param inches if true, sets the scale to inches; if false, sets the scale to millimeters.
+     * Retrieves the rainfall measurement over the last 24 hours from the weather service in inches.
+     * @return the rainfall amount in inches.
      */
-    public void setLengthScale(boolean inches) {
-        this.inches = inches;
+    public double getRainfallInches() {
+        double mmRainfall = weatherService.getRainfall();
+        double inRainfall = mmRainfall / 25.4;
+
+        return inRainfall;
     }
 
     /**
-     * Retrieves the rainfall measurement over the last 24 hours from the weather service in the preferred scale.
-     * 
-     * @return the rainfall amount. If the measurement is in inches, it returns the value as is.
-     *         If the measurement is not in inches, it converts the value to millimeters.
+     * Retrieves the rainfall measurement over the last 24 hours from the weather service in millimeters.
+     * @return the rainfall amount in millimeters.
      */
-    public double getRainfall() {
-        double wsRainfall = weatherService.getRainfall();
-        if (inches) {
-            return wsRainfall / 25.4;
-        } else {
-            return wsRainfall;
-        }
+    public double getRainfallMm() {
+        double mmRainfall = weatherService.getRainfall();
+
+        return mmRainfall;
     }
 }
